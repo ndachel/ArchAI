@@ -1,0 +1,39 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      # Maps your local folder to Ollama's internal model storage
+      - /mnt/storage/models:/root/.ollama
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  ollama-cli:
+    image: ollama/ollama:latest
+    container_name: ollama-cli
+    entrypoint: /bin/bash
+    stdin_open: true
+    tty: true
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
+
+#  lobe-chat:
+#    image: lobehub/lobe-chat:latest
+#    container_name: lobe-chat
+#    ports:
+#      - "3210:3210"
+#    environment:
+#      # Tells the UI to connect to your Ollama container
+#      - OLLAMA_PROXY_URL=http://ollama:11434/v1
+#    restart: unless-stopped
+#    depends_on:
+#      - ollama
