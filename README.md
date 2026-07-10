@@ -106,7 +106,7 @@ Example registry entry:
   "description": "Returns current OS, kernel, CPU, GPU",
   "path": "./tools/system_info/system_info.py"
 }
-
+```
 A tool:
 
 receives no implicit model authority
