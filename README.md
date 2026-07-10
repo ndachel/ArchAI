@@ -106,3 +106,166 @@ Example registry entry:
   "description": "Returns current OS, kernel, CPU, GPU",
   "path": "./tools/system_info/system_info.py"
 }
+
+A tool:
+
+receives no implicit model authority
+returns structured information
+can be independently tested
+can be added without rebuilding the model
+Current Tools
+system_info
+
+Returns:
+
+operating system
+kernel
+architecture
+CPU
+GPU
+
+Example:
+
+{
+  "os": "CachyOS",
+  "kernel": "7.1.2-3-cachyos",
+  "architecture": "x86_64",
+  "cpu": "13th Gen Intel(R) Core(TM) i7-13700K",
+  "gpu": "NVIDIA GeForce RTX 4090"
+}
+disk_usage
+
+Returns filesystem capacity information.
+
+lspci
+
+Returns PCI hardware inventory.
+
+Useful for hardware discovery.
+
+pacman_query
+
+Returns installed package inventory.
+
+Currently informational only.
+
+Tool Invocation Protocol
+
+ArchAI requests tools using structured JSON:
+
+{
+  "action": "tool_call",
+  "tool": "system_info",
+  "arguments": {}
+}
+
+The controller:
+
+Parses the request.
+Verifies the tool exists.
+Executes the registered capability.
+Returns results to the model.
+Logging
+
+ArchAI records interactions in JSON Lines format:
+
+logs/archai.jsonl
+
+Logged events include:
+
+user requests
+model responses
+tool requests
+tool results
+
+Logging exists to support:
+
+debugging
+auditing
+future evaluator systems
+Running
+
+Start Ollama:
+
+docker compose up -d
+
+Run ArchAI:
+
+./archai.py
+
+Example:
+
+> What GPU do I have?
+
+ArchAI:
+You have an NVIDIA GeForce RTX 4090.
+Current Limitations
+
+This is an early prototype.
+
+Known limitations:
+
+single-turn interaction loop
+limited tool set
+no persistent memory
+no user approval workflow
+tool execution is local and trusted
+model output parsing is intentionally simple
+Future Directions
+
+Potential next steps:
+
+Multi-step planning
+
+Allow:
+
+Question
+   |
+system_info
+   |
+disk_usage
+   |
+hardware analysis
+   |
+answer
+Capability permissions
+
+Introduce policy controls:
+
+{
+  "name": "package_install",
+  "risk": "high",
+  "requires_confirmation": true
+}
+Evaluator / Supervisor Layer
+
+Add a supervisory model or rules engine to evaluate:
+
+whether the requested action is appropriate
+whether the tool is authorized
+whether the answer is grounded
+AI Shell Interface
+
+Long-term concept:
+
+Intent
+  |
+AI reasoning
+  |
+Capability broker
+  |
+Linux system
+
+A natural language interface to a system where the AI has useful capabilities without unrestricted authority.
+
+Status
+
+Prototype phase.
+
+The current milestone demonstrates:
+
+local inference
+grounded system awareness
+capability-based tools
+structured tool invocation
+auditable execution
