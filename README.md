@@ -109,12 +109,13 @@ Example registry entry:
 ```
 A tool:
 
-receives no implicit model authority
-returns structured information
-can be independently tested
-can be added without rebuilding the model
-Current Tools
-system_info
+ - receives no implicit model authority
+ - returns structured information
+ - can be independently tested
+ - can be added without rebuilding the model
+
+### Current Tools
+#### system_info
 
 Returns:
 
@@ -133,39 +134,40 @@ Example:
   "cpu": "13th Gen Intel(R) Core(TM) i7-13700K",
   "gpu": "NVIDIA GeForce RTX 4090"
 }
-disk_usage
+#### disk_usage
 
 Returns filesystem capacity information.
 
-lspci
+#### lspci
 
 Returns PCI hardware inventory.
 
 Useful for hardware discovery.
 
-pacman_query
+#### pacman_query
 
 Returns installed package inventory.
 
 Currently informational only.
 
-Tool Invocation Protocol
+### Tool Invocation Protocol
 
 ArchAI requests tools using structured JSON:
-
+```json
 {
   "action": "tool_call",
   "tool": "system_info",
   "arguments": {}
 }
+```
 
 The controller:
 
-Parses the request.
-Verifies the tool exists.
-Executes the registered capability.
-Returns results to the model.
-Logging
+ - Parses the request.
+ - Verifies the tool exists.
+ - Executes the registered capability.
+ - Returns results to the model.
+ - Does some logging
 
 ArchAI records interactions in JSON Lines format:
 
@@ -173,17 +175,12 @@ logs/archai.jsonl
 
 Logged events include:
 
-user requests
-model responses
-tool requests
-tool results
+ - user requests
+ - model responses
+ - tool requests
+ - tool results
 
-Logging exists to support:
-
-debugging
-auditing
-future evaluator systems
-Running
+-----
 
 Start Ollama:
 
@@ -199,18 +196,10 @@ Example:
 
 ArchAI:
 You have an NVIDIA GeForce RTX 4090.
-Current Limitations
 
+---
 This is an early prototype.
 
-Known limitations:
-
-single-turn interaction loop
-limited tool set
-no persistent memory
-no user approval workflow
-tool execution is local and trusted
-model output parsing is intentionally simple
 Future Directions
 
 Potential next steps:
